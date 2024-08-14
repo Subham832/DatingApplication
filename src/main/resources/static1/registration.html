@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Registration</title>
+</head>
+<body>
+<h2>Register as a Member</h2>
+<form id="registration-form" method="post" action="/api/members/register">
+    <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+    </div>
+    <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+    </div>
+    <div>
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+    <div>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+    </div>
+    <div>
+        <label for="mbr_plan">Membership Plan:</label>
+        <input type="text" id="mbr_plan" name="mbr_plan" required>
+    </div>
+    <div>
+        <label for="mobNo">Mobile Number:</label>
+        <input type="tel" id="mobNo" name="mobNo" required>
+    </div>
+    <div>
+        <label for="interest">Interest:</label>
+        <select id="interest" name="interest" required>
+            <!-- Populate with options from the backend -->
+        </select>
+    </div>
+    <div>
+        <label for="country">Country:</label>
+        <select id="country" name="country" required>
+            <!-- Populate with options from the backend -->
+        </select>
+    </div>
+    <div>
+        <label for="countryCode">Country Code:</label>
+        <select id="countryCode" name="countryCode" required>
+            <!-- Populate with options from the backend -->
+        </select>
+    </div>
+    <button type="submit">Register</button>
+</form>
+
+<script>
+    // JavaScript to populate dropdowns
+    async function populateDropdowns() {
+        try {
+            const interestResponse = await fetch('/api/interests');
+            const interests = await interestResponse.json();
+            const interestSelect = document.getElementById('interest');
+            interests.forEach(interest => {
+                const option = document.createElement('option');
+                option.value = interest.id;
+                option.textContent = interest.name;
+                interestSelect.appendChild(option);
+            });
+
+            const countryResponse = await fetch('/api/countries');
+            const countries = await countryResponse.json();
+            const countrySelect = document.getElementById('country');
+            const countryCodeSelect = document.getElementById('countryCode');
+            countries.forEach(country => {
+                const countryOption = document.createElement('option');
+                countryOption.value = country.id;
+                countryOption.textContent = country.name;
+                countrySelect.appendChild(countryOption);
+
+                const codeOption = document.createElement('option');
+                codeOption.value = country.code;
+                codeOption.textContent = country.code;
+                countryCodeSelect.appendChild(codeOption);
+            });
+        } catch (error) {
+            console.error('Error populating dropdowns:', error);
+        }
+    }
+
+    // Call populateDropdowns on page load
+    document.addEventListener('DOMContentLoaded', populateDropdowns);
+</script>
+</body>
+</html>
